@@ -1,9 +1,15 @@
 body {
-    background: #352f5b;
+    background: #db8708;
 }
 
 .todos li {
-    background: #423a6f;
+    background: #ecf1ee;
+    color: black;
+
+}
+.delete{
+    color: black;
+    font-size: large;
 }
 
 .delete {
@@ -13,4 +19,8 @@ body {
 /* Filtered */
 .filtered {
     display: none !important;
+}
+fas fa-check-circle i{
+color:aliceblue;
+font-size: large;
 }
