@@ -5,22 +5,31 @@ body {
 .todos li {
     background: #ecf1ee;
     color: black;
-
+    display: flex;
+    justify-content: space-between;
 }
-.delete{
+
+.complete {
+    cursor: pointer;
     color: black;
     font-size: large;
+    f;
 }
 
 .delete {
     cursor: pointer;
+    color: black;
+    font-size: large;
 }
 
+
 /* Filtered */
+
 .filtered {
     display: none !important;
 }
-fas fa-check-circle i{
-color:aliceblue;
-font-size: large;
+
+fas fa-check-circle i {
+    color: aliceblue;
+    font-size: large;
 }
