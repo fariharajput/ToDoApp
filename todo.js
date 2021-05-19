@@ -24,7 +24,8 @@ addForm.addEventListener("submit", (e) => {
 
     const todo = {
         todo_item: addForm.toAdd.value,
-        date_created: firebase.firestore.Timestamp.fromDate(now) //timestamp object based on firestore requirement
+        date_created: firebase.firestore.Timestamp.fromDate(now), //timestamp object based on firestore requirement,
+        status: "in-progress"
     }
 
     db.collection("Todo's")
@@ -64,24 +65,37 @@ list.addEventListener("click", (e) => {
     }
 });
 
-// Delete documents from firestore.
+// Complete documents from firestore.
 list.addEventListener("click", (e) => {
-    console.log(e)
+    const now = new Date();
     if (e.target.classList.contains("complete")) {
-        const itemText = document.querySelector(".item-text");
-        const complete = document.querySelector(".complete");
-        console.log(complete)
-        complete.style.color = "green"
-        complete.style.disabled = "none";
-        itemText.style.textDecoration = "line-through"
-
+        const id = e.target.parentElement.parentElement.getAttribute("data-id");
+        db.collection("Todo's")
+            .doc(id)
+            .update({ status: "completed" })
+            .then(() => {
+                console.log("todo completed");
+            });
 
 
     }
 });
 
 
+const todoComplete = (id) => {
+    const todos = document.querySelectorAll("li");
+    todos.forEach((todo) => {
+        if (todo.getAttribute("data-id") === id) {
+            const itemText = todo.childNodes.className(".item-text");
+            const complete = document.querySelector(".complete");
 
+            complete.style.color = "blue"
+            console.log(itemText)
+
+            itemText.style.textDecoration = "line-through"
+        }
+    });
+};
 
 const deleteTodo = (id) => {
     const todos = document.querySelectorAll("li");
@@ -95,12 +109,16 @@ const deleteTodo = (id) => {
 // Real Time UI Updates.
 // By attaching a real-time updates listener that firestore provides us.
 db.collection("Todo's").onSnapshot((snapshot) => {
+
     snapshot.docChanges().forEach((change) => {
         const doc = change.doc;
+        console.log(change.type)
         if (change.type === "added") {
             addTodo(doc.data(), doc.id);
         } else if (change.type === "removed") {
             deleteTodo(doc.id);
+        } else if (change.type === "modified") {
+            todoComplete(doc.id)
         }
     });
 });
